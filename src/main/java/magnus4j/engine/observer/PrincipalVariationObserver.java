@@ -17,7 +17,7 @@ public class PrincipalVariationObserver extends AbstractEngineObserver {
      * Principal variation observer.
      *
      * @param observableEngine
-     *            the magnus4j.engine to listen.
+     *            the engine to listen.
      */
     public PrincipalVariationObserver(ObservableEngine observableEngine,
             PrincipalVariationStrategy pvStrategy) {

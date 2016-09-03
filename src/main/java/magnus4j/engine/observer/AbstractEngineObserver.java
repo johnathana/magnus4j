@@ -10,15 +10,15 @@ import java.util.Observer;
 public abstract class AbstractEngineObserver implements Observer {
 
     /**
-     * The magnus4j.engine to listen.
+     * The engine to listen.
      */
     protected final ObservableEngine _engine;
 
     /**
-     * Chess magnus4j.engine observer constructor.
+     * Chess engine observer constructor.
      *
      * @param observableEngine
-     *            the magnus4j.engine to listen.
+     *            the engine to listen.
      */
     public AbstractEngineObserver(final ObservableEngine observableEngine) {
         _engine = observableEngine;
@@ -26,7 +26,7 @@ public abstract class AbstractEngineObserver implements Observer {
     }
 
     /**
-     * Return active magnus4j.engine.
+     * Return active engine.
      */
     public ObservableEngine getEngine() {
         return _engine;

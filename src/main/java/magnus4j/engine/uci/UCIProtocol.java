@@ -10,22 +10,22 @@ import java.util.List;
 public interface UCIProtocol {
 
     /**
-     * Start the magnus4j.engine process.
+     * Start the engine process.
      */
     void init();
 
     /**
-     * Quit the magnus4j.engine process.
+     * Quit the engine process.
      */
     void quit();
 
     /**
-     * Write a line to the magnus4j.engine.
+     * Write a line to the engine.
      */
     void writeLine(String line);
 
     /**
-     * Set magnus4j.engine option.
+     * Set engine option.
      * 
      * @param name
      *            the option's name.

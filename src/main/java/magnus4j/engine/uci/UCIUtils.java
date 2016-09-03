@@ -36,7 +36,7 @@ public class UCIUtils {
      * PV to move list.
      *
      * @param pv
-     *            the magnus4j.engine's pv.
+     *            the engine's pv.
      * @return the list of moves.
      */
     public static List<Move> pvToMoves(final List<String> pv) {

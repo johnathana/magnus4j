@@ -15,7 +15,7 @@ public class BestMoveObserver extends AbstractEngineObserver {
      * Best move observer.
      *
      * @param observableEngine
-     *            the magnus4j.engine to listen.
+     *            the engine to listen.
      */
     public BestMoveObserver(ObservableEngine observableEngine) {
         super(observableEngine);

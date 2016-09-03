@@ -32,8 +32,12 @@ public class StockfishEngine extends AbstractUCIEngine {
 
         if (OSUtils.isWindows()) {
             stockfishResource = "/engines/windows/stockfish_7_x64.exe";
-        } else {
+        } else if (OSUtils.isLinux()) {
             stockfishResource = "/engines/linux/stockfish_7_x64";
+        } else if (OSUtils.isMac()) {
+            stockfishResource = "/engines/mac/stockfish-7-64";
+        } else {
+            throw new RuntimeException("Unsupported operating system.");
         }
 
         try {
