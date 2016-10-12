@@ -28,6 +28,27 @@ public class StockfishEngine extends AbstractUCIEngine {
         if (_engineCommand != null)
             return _engineCommand;
 
+        try {
+            InputStream in = getStockfishResource();
+            File localStockfish = getTempStockfish();
+
+            try (OutputStream out = new FileOutputStream(localStockfish)) {
+                byte[] buf = new byte[8192];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+            }
+
+            _engineCommand = localStockfish.getAbsolutePath();
+            return _engineCommand;
+
+        } catch (IOException e) {
+            throw new UCIEngineException(e);
+        }
+    }
+
+    private InputStream getStockfishResource() {
         String stockfishResource;
 
         if (OSUtils.isWindows()) {
@@ -39,27 +60,13 @@ public class StockfishEngine extends AbstractUCIEngine {
         } else {
             throw new RuntimeException("Unsupported operating system.");
         }
+        return getClass().getResourceAsStream(stockfishResource);
+    }
 
-        try {
-            InputStream in = getClass().getResourceAsStream(stockfishResource);
-            File tmpStockfish = File.createTempFile("stockfish-6-", ".exe");
-            OutputStream out = new FileOutputStream(tmpStockfish);
-
-            byte[] buffer = new byte[4096];
-            int read;
-            while ((read = in.read(buffer)) != -1) {
-                out.write(buffer, 0, read);
-            }
-            out.flush();
-            out.close();
-
-            tmpStockfish.setExecutable(true, false);
-
-            _engineCommand = tmpStockfish.getAbsolutePath();
-            return _engineCommand;
-
-        } catch (IOException e) {
-            throw new UCIEngineException(e);
-        }
+    private File getTempStockfish() throws IOException {
+        File tmpStockfish = File.createTempFile("stockfish-", ".exe");
+        tmpStockfish.setExecutable(true, false);
+        tmpStockfish.deleteOnExit();
+        return tmpStockfish;
     }
 }
