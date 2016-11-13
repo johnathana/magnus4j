@@ -1,5 +1,6 @@
-package magnus4j.chess;
+package magnus4j.chess.game;
 
+import magnus4j.chess.game.Line;
 import magnus4j.chess.move.Move;
 import magnus4j.chess.notation.NotationType;
 import magnus4j.chess.position.MovablePosition;
@@ -16,9 +17,7 @@ public class Game implements Iterable<Move> {
 
     private int _moveIndex;
 
-    private Position _startPosition;
-
-    private List<Move> _moves;
+    private Line _line;
 
     private MovablePosition _currentPosition;
 
@@ -30,9 +29,8 @@ public class Game implements Iterable<Move> {
      */
     public Game(final Position position) {
         _moveIndex = 0;
-        _startPosition = position;
-        _moves = new LinkedList<>();
-        _currentPosition = new MovablePosition(_startPosition);
+        _line = new Line(position, new LinkedList<>());
+        _currentPosition = new MovablePosition(position);
     }
 
     /**
@@ -43,9 +41,8 @@ public class Game implements Iterable<Move> {
      */
     public Game(final List<Move> moves) {
         _moveIndex = 0;
-        _startPosition = new Position();
-        _moves = new LinkedList<>(moves);
-        _currentPosition = new MovablePosition(_startPosition);
+        _line = new Line(new Position(), moves);
+        _currentPosition = new MovablePosition();
     }
 
     public int getMoveIndex() {
@@ -53,7 +50,7 @@ public class Game implements Iterable<Move> {
     }
 
     public Position getStartPosition() {
-        return _startPosition;
+        return _line.getPosition();
     }
 
     public MovablePosition getCurrentPosition() {
@@ -68,17 +65,17 @@ public class Game implements Iterable<Move> {
      */
     public void gotoMove(int ply) {
 
-        if (ply < 0 || ply > _moves.size()) {
+        if (ply < 0 || ply > _line.getMoves().size()) {
             return;
         }
 
         if (ply < _moveIndex) {
             _moveIndex = 0;
-            _currentPosition = new MovablePosition(_startPosition);
+            _currentPosition = new MovablePosition(_line.getPosition());
         }
 
         for (int i = _moveIndex; i < ply; i++) {
-            Move move = _moves.get(i);
+            Move move = _line.getMoves().get(i);
             _currentPosition.makeMove(move);
         }
 
@@ -92,26 +89,26 @@ public class Game implements Iterable<Move> {
      *            the move.
      */
     public void playMove(final Move move) {
-        if (_moveIndex == _moves.size()) {
-            _moves.add(move);
+        if (_moveIndex == _line.getMoves().size()) {
+            _line.getMoves().add(move);
             _currentPosition.makeMove(move);
-            _moveIndex = _moves.size();
+            _moveIndex = _line.getMoves().size();
         } else {
-            _moves.add(_moveIndex, move);
-            _moves.subList(_moveIndex + 1, _moves.size()).clear();
+            _line.getMoves().add(_moveIndex, move);
+            _line.getMoves().subList(_moveIndex + 1, _line.getMoves().size()).clear();
             _moveIndex = 0;
-            _currentPosition = new MovablePosition(_startPosition);
-            gotoMove(_moves.size());
+            _currentPosition = new MovablePosition(_line.getPosition());
+            gotoMove(_line.getMoves().size());
         }
     }
 
     @Override
     public String toString() {
-        return NotationType.STANDARD_ALGEBRAIC.getInstance().movesToString(_moves, _startPosition);
+        return NotationType.STANDARD_ALGEBRAIC.getInstance().lineToString(_line);
     }
 
     @Override
     public Iterator<Move> iterator() {
-        return _moves.iterator();
+        return _line.iterator();
     }
 }

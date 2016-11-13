@@ -1,9 +1,8 @@
 package magnus4j.chess.notation;
 
+import magnus4j.chess.game.Line;
 import magnus4j.chess.move.Move;
 import magnus4j.chess.position.Position;
-
-import java.util.List;
 
 /**
  * Notation interface.
@@ -30,13 +29,11 @@ public interface Notation {
     String moveToString(Move move, Position position);
 
     /**
-     * Translates a list of moves to algebraic notation.
+     * Translates a line to algebraic notation.
      *
-     * @param moves
-     *            the list of moves.
-     * @param position
-     *            the current position.
+     * @param line
+     *            the line.
      * @return the algebraic notation of the moves.
      */
-    String movesToString(List<Move> moves, Position position);
+    String lineToString(Line line);
 }

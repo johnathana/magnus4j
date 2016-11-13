@@ -1,36 +1,35 @@
 package magnus4j.engine.uci.pv;
 
-import magnus4j.chess.move.Move;
+import magnus4j.chess.game.Line;
 import magnus4j.chess.notation.Notation;
 import magnus4j.chess.notation.NotationType;
 import magnus4j.chess.position.Position;
 import magnus4j.engine.uci.UCIUtils;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * UCI principal variation line.
  */
 public class PVInfo {
 
-    int _depth;
+    private int _depth;
 
-    int _multiPV = 1;
+    private int _multiPV = 1;
 
-    long _nodes;
+    private long _nodes;
 
-    int _nps;
+    private int _nps;
 
-    int _score;
+    private int _score;
 
-    boolean _isMate;
+    private boolean _isMate;
 
-    boolean _isNotBound;
+    private boolean _isNotBound;
 
-    List<String> _moves;
+    private Line _line;
 
-    Position _position;
+    private Position _position;
 
     /**
      * PVInfo constructor.
@@ -68,7 +67,7 @@ public class PVInfo {
 
             case "pv":
                 String pv[] = Arrays.copyOfRange(tokens, i, tokens.length);
-                _moves = Arrays.asList(pv);
+                _line = new Line(_position, UCIUtils.pvToMoves(Arrays.asList(pv)));
                 break;
 
             case "score":
@@ -85,16 +84,36 @@ public class PVInfo {
         }
     }
 
+    public int getDepth() {
+        return _depth;
+    }
+
     public int getMultiPV() {
         return _multiPV;
+    }
+
+    public long getNodes() {
+        return _nodes;
+    }
+
+    public int getNPS() {
+        return _nps;
+    }
+
+    public int getScore() {
+        return _score;
+    }
+
+    public boolean isMate() {
+        return _isMate;
     }
 
     public boolean isNotBound() {
         return _isNotBound;
     }
 
-    public List<String> getMoves() {
-        return _moves;
+    public Line getLine() {
+        return _line;
     }
 
     @Override
@@ -114,11 +133,8 @@ public class PVInfo {
         }
 
         Notation notation = NotationType.FIGURINE_ALGEBRAIC.getInstance();
-        List<Move> moveList = UCIUtils.pvToMoves(_moves);
-
-        String pvMoves = notation.movesToString(moveList, _position);
+        String pvMoves = notation.lineToString(_line);
         pvLine.append("\n").append(pvMoves);
-
         return pvLine.toString();
     }
 }

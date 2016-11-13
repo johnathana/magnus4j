@@ -1,6 +1,6 @@
 package magnus4j.pgn;
 
-import magnus4j.chess.Game;
+import magnus4j.chess.game.Game;
 import magnus4j.chess.move.Move;
 import magnus4j.chess.notation.Notation;
 import magnus4j.chess.notation.NotationType;

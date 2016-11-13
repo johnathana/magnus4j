@@ -4,6 +4,7 @@ import magnus4j.chess.Piece;
 import magnus4j.chess.PieceType;
 import magnus4j.chess.Side;
 import magnus4j.chess.Square;
+import magnus4j.chess.game.Line;
 import magnus4j.chess.logic.PieceMoves;
 import magnus4j.chess.logic.PieceUtils;
 import magnus4j.chess.logic.PositionUtils;
@@ -104,25 +105,21 @@ class AlgebraicNotation implements Notation {
     }
 
     @Override
-    public String movesToString(final List<Move> moves, final Position pos) {
+    public String lineToString(final Line line) {
 
         StringBuilder sb = new StringBuilder();
-        MovablePosition curPos = new MovablePosition(pos);
+        MovablePosition curPos = new MovablePosition(line.getPosition());
 
         if (!curPos.isWhitesTurn()) {
             sb.append(curPos.getFullMoveNumber()).append("... ");
         }
 
-        for (Move move : moves) {
-            try {
-                String notation = moveToString(move, curPos);
-                if (curPos.isWhitesTurn())
-                    sb.append(curPos.getFullMoveNumber()).append(".");
-                sb.append(notation);
-            } catch (Exception ex) {
-                System.err.println(moves);
-                break;
+        for (Move move : line) {
+            String notation = moveToString(move, curPos);
+            if (curPos.isWhitesTurn()) {
+                sb.append(curPos.getFullMoveNumber()).append(".");
             }
+            sb.append(notation);
 
             curPos.makeMove(move);
             kingInCheckOrMate(curPos, sb);

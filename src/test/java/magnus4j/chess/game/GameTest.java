@@ -1,8 +1,8 @@
-package magnus4j.chess;
+package magnus4j.chess.game;
 
-import javafx.geometry.Pos;
+import magnus4j.chess.Square;
+import magnus4j.chess.game.Game;
 import magnus4j.chess.move.Move;
-import magnus4j.chess.position.Position;
 import org.junit.Before;
 import org.junit.Test;
 import magnus4j.pgn.PGNReader;

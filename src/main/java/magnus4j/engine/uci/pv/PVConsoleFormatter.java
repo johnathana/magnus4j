@@ -1,5 +1,6 @@
 package magnus4j.engine.uci.pv;
 
+import magnus4j.chess.notation.Notation;
 import magnus4j.chess.notation.NotationType;
 import magnus4j.engine.uci.UCIUtils;
 
@@ -7,6 +8,8 @@ import magnus4j.engine.uci.UCIUtils;
  * Principal Variation console formatter.
  */
 public class PVConsoleFormatter implements PrincipalVariationStrategy {
+
+    private Notation notation = NotationType.STANDARD_ALGEBRAIC.getInstance();
 
     @Override
     public void handlePVUpdate(final PVInfo pvInfo) {
@@ -19,19 +22,17 @@ public class PVConsoleFormatter implements PrincipalVariationStrategy {
 
         pvLine.append(". ");
 
-        if (pvInfo._isMate) {
-            pvLine.append(String.format("(#%d)", Math.abs(pvInfo._score)));
+        if (pvInfo.isMate()) {
+            pvLine.append(String.format("(#%d)", Math.abs(pvInfo.getScore())));
         } else {
-            String equality = UCIUtils.equalityScore(pvInfo._score);
+            String equality = UCIUtils.equalityScore(pvInfo.getScore());
             pvLine.append(String.format("%s", equality));
 
-            pvLine.append(String.format(" (%+.2f) [%d]: ", pvInfo._score / 100.0, pvInfo._depth));
+            pvLine.append(String.format(" (%+.2f) [%d]: ", pvInfo.getScore() / 100.0, pvInfo.getDepth()));
         }
 
-        String pvMoves = NotationType.STANDARD_ALGEBRAIC.getInstance()
-            .movesToString(UCIUtils.pvToMoves(pvInfo._moves), pvInfo._position);
+        String pvMoves = notation.lineToString(pvInfo.getLine());
         pvLine.append(" ").append(pvMoves);
-
         System.out.format("%s%n", pvLine.toString());
     }
 }

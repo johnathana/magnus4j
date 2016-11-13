@@ -58,9 +58,4 @@ public class Move {
     public boolean isPromotion() {
         return (_promotion != null);
     }
-
-    @Override
-    public String toString() {
-        return _from.toLowerCase() + _to.toLowerCase();
-    }
 }
