@@ -34,7 +34,7 @@ public class PositionUtils {
         char rank = (char) (square.getRank() + moveType.getRankInc());
 
         /* File overflow check */
-        if ('a' > file || file > 'h') {
+        if ('A' > file || file > 'H') {
             return null;
         }
 
@@ -43,7 +43,7 @@ public class PositionUtils {
             return null;
         }
 
-        return Square.fromStr(String.valueOf(file) + rank);
+        return Square.fromName(String.valueOf(file) + rank);
     }
 
     /**
@@ -157,7 +157,7 @@ public class PositionUtils {
 
         Piece king = PieceUtils.getPieceFromType(PieceType.KING, position.getActiveSide());
         MovablePosition posAfterMove = new MovablePosition(position);
-        posAfterMove.doMove(move);
+        posAfterMove.makeMove(move);
 
         Square kingSquare = getSquareWithPiece(king, posAfterMove);
 
@@ -228,7 +228,6 @@ public class PositionUtils {
      * @return the square with piece.
      */
     public static Square getSquareWithPiece(final Piece piece, final Position position) {
-
         for (Square square : position.getSquaresWithPiece()) {
             if (position.getPiece(square) == piece) {
                 return square;

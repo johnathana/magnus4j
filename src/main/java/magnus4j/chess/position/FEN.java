@@ -29,7 +29,6 @@ public class FEN {
      */
     private static final Map<Piece, String> PIECE_TO_FEN_MAP = new EnumMap<>(Piece.class);
 
-
     static {
         FEN_TO_PIECE_MAP.put("K", Piece.WHITE_KING);
         FEN_TO_PIECE_MAP.put("k", Piece.BLACK_KING);
@@ -67,8 +66,7 @@ public class FEN {
      * @param fen
      *            the fen string.
      */
-    public static void positionFromFEN(final Position position, final String fen) {
-
+    static void positionFromFEN(final Position position, final String fen) {
         // validateFEN(fen);
         position._position = new EnumMap<>(Square.class);
 
@@ -89,7 +87,7 @@ public class FEN {
             }
 
             Piece piece = FEN_TO_PIECE_MAP.get(String.valueOf(c));
-            position._position.put(Square.valueOf(squareNum), piece);
+            position._position.put(Square.values()[squareNum], piece);
 
             squareNum++;
         }
@@ -115,7 +113,7 @@ public class FEN {
      *            the position.
      * @return the fen string.
      */
-    public static String fenFromPosition(final Position position) {
+    static String fenFromPosition(final Position position) {
         StringBuilder sb = new StringBuilder(64);
 
         for (int row = 0; row < 8; row++) {
@@ -124,7 +122,7 @@ public class FEN {
 
                 int fenSquare = (8 * row) + col;
 
-                Square square = Square.valueOf(fenSquare);
+                Square square = Square.values()[fenSquare];
 
                 Piece piece = position._position.get(square);
                 if (piece == null) {
@@ -152,7 +150,7 @@ public class FEN {
         sb.append(" ");
         sb.append(sideToFEN(position._activeSide)).append(" ");
         sb.append(position._castling).append(" ");
-        sb.append(position._enPassant != null ? position._enPassant.toString().toLowerCase() : "-")
+        sb.append(position._enPassant != null ? position._enPassant.toLowerCase() : "-")
             .append(" ");
         sb.append(position._halfMoveClock).append(" ");
         sb.append(position._fullMoveNumber);

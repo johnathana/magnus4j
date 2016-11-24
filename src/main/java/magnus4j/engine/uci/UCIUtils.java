@@ -20,15 +20,13 @@ public class UCIUtils {
      * @return the <code>Move</code>.
      */
     public static Move moveFromUCI(final String uciMove) {
-
-        Square from = Square.fromStr(uciMove.substring(0, 2));
-        Square to = Square.fromStr(uciMove.substring(2, 4));
+        Square from = Square.fromName(uciMove.substring(0, 2));
+        Square to = Square.fromName(uciMove.substring(2, 4));
 
         if (uciMove.length() == 5) {
             PieceType promotion = parsePromotion(uciMove.substring(4, 5));
             return new Move(from, to, promotion);
         }
-
         return new Move(from, to);
     }
 

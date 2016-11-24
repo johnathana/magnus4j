@@ -47,7 +47,6 @@ public class KingMoves {
             final Position position, final Square squareFrom) {
 
         List<Square> legalMoves = new ArrayList<>();
-
         for (Square squareTo : squareList) {
             Move move = new Move(squareFrom, squareTo);
             if (PositionUtils.isKingInCheckAfterMove(position, move))
@@ -55,40 +54,38 @@ public class KingMoves {
 
             legalMoves.add(squareTo);
         }
-
         return legalMoves;
     }
 
     private static List<Square> getCastlingMoves(final Position position, final Square square) {
-
         List<Square> castlingMoves = new ArrayList<>();
 
         Piece piece = position.getPiece(square);
         if (piece == Piece.WHITE_KING) {
-            if (position.getCastling().contains("K") && position.areAllEmpty(Square.F1, Square.G1)
-                    && PositionUtils.areNotAttacked(position, Square.F1, Square.G1)) {
+            if (position.getCastling().contains("K") &&
+                position.areAllEmpty(Square.F1, Square.G1) &&
+                PositionUtils.areNotAttacked(position, Square.F1, Square.G1)) {
                 castlingMoves.add(Square.G1);
             }
 
-            if (position.getCastling().contains("Q")
-                    && position.areAllEmpty(Square.B1, Square.C1, Square.D1)
-                    && PositionUtils.areNotAttacked(position, Square.C1, Square.D1)) {
+            if (position.getCastling().contains("Q") &&
+                position.areAllEmpty(Square.B1, Square.C1, Square.D1) &&
+                PositionUtils.areNotAttacked(position, Square.C1, Square.D1)) {
                 castlingMoves.add(Square.C1);
             }
-
         } else {
-            if (position.getCastling().contains("k") && position.areAllEmpty(Square.F8, Square.G8)
-                    && PositionUtils.areNotAttacked(position, Square.F8, Square.G8)) {
+            if (position.getCastling().contains("k") &&
+                position.areAllEmpty(Square.F8, Square.G8) &&
+                PositionUtils.areNotAttacked(position, Square.F8, Square.G8)) {
                 castlingMoves.add(Square.G8);
             }
 
-            if (position.getCastling().contains("q")
-                    && position.areAllEmpty(Square.B8, Square.C8, Square.D8)
-                    && PositionUtils.areNotAttacked(position, Square.C8, Square.D8)) {
+            if (position.getCastling().contains("q") &&
+                position.areAllEmpty(Square.B8, Square.C8, Square.D8) &&
+                PositionUtils.areNotAttacked(position, Square.C8, Square.D8)) {
                 castlingMoves.add(Square.C8);
             }
         }
-
         return castlingMoves;
     }
 }

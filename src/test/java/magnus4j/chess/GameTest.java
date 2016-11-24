@@ -1,6 +1,8 @@
 package magnus4j.chess;
 
+import javafx.geometry.Pos;
 import magnus4j.chess.move.Move;
+import magnus4j.chess.position.Position;
 import org.junit.Before;
 import org.junit.Test;
 import magnus4j.pgn.PGNReader;
@@ -12,7 +14,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class GameTest {
 
-    Game game;
+    private Game game;
 
     @Before
     public void setUp() throws Exception {

@@ -53,17 +53,13 @@ public class PawnMoves {
         }
 
         List<Square> attackingSquares = PawnMoves.getPawnControllingSquares(position, square);
-
-        /**
-         * Filter pawn capturing moves. Squares should have enemy pieces.
-         */
         moves.addAll(PawnMoves.filterPawnCapturingMoves(attackingSquares, position));
-
         return moves;
     }
 
     /**
-     * Function to filter valid pawn moves.
+     * Function to filter valid capturing pawn moves.
+     * Square should be en passant square or have enemy piece.
      *
      * @param squareList
      *            the list of capturing squares.
@@ -71,7 +67,7 @@ public class PawnMoves {
      *            the current position.
      * @return the valid moves.
      */
-    public static List<Square> filterPawnCapturingMoves(final List<Square> squareList,
+    private static List<Square> filterPawnCapturingMoves(final List<Square> squareList,
             final Position position) {
         List<Square> capturingSquares = new ArrayList<>();
         for (Square square : squareList) {
@@ -84,7 +80,6 @@ public class PawnMoves {
     }
 
     private static List<Square> getWhitePawnMoves(Position position, Square square) {
-
         List<Square> moves = new ArrayList<>();
 
         Square forwardSquare = PositionUtils.findSquare(square, MoveType.UP);
@@ -101,7 +96,6 @@ public class PawnMoves {
     }
 
     private static List<Square> getBlackPawnMoves(Position position, Square square) {
-
         List<Square> moves = new ArrayList<>();
 
         Square forwardSquare = PositionUtils.findSquare(square, MoveType.DOWN);
@@ -116,5 +110,4 @@ public class PawnMoves {
 
         return moves;
     }
-
 }

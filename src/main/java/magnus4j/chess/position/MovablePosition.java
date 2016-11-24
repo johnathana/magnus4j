@@ -50,7 +50,6 @@ public class MovablePosition extends Position {
      *            the square to set the piece.
      */
     public void setPiece(final Piece piece, final Square square) {
-        removePiece(square);
         _position.put(square, piece);
     }
 
@@ -75,12 +74,12 @@ public class MovablePosition extends Position {
     }
 
     /**
-     * Do a move.
+     * Make a move.
      * 
      * @param move
      *            the move to make.
      */
-    public void doMove(final Move move) {
+    public void makeMove(final Move move) {
 
         boolean isCapture = isCaptureMove(move);
         Square enPassantSquare = getEnPassantSquare(move);
@@ -112,9 +111,7 @@ public class MovablePosition extends Position {
     }
 
     private Square getEnPassantSquare(final Move move) {
-
         Piece piece = getPiece(move.getFrom());
-
         if (piece.getPieceType() != PieceType.PAWN)
             return null;
 
@@ -122,7 +119,6 @@ public class MovablePosition extends Position {
             return PositionUtils.findSquare(move.getFrom(),
                 (piece == Piece.WHITE_PAWN) ? MoveType.UP : MoveType.DOWN);
         }
-
         return null;
     }
 
@@ -132,11 +128,11 @@ public class MovablePosition extends Position {
                 : getPiece(move.getFrom());
 
         if (isEnPassantCapture(move)) {
-            _position.remove(PositionUtils.findEnPassantCaptureSquare(this, move.getFrom()));
+            removePiece(PositionUtils.findEnPassantCaptureSquare(this, move.getFrom()));
         }
 
-        _position.remove(move.getFrom());
-        _position.put(move.getTo(), piece);
+        removePiece(move.getFrom());
+        setPiece(piece, move.getTo());
 
         castlingMove(move, piece);
     }
@@ -148,17 +144,17 @@ public class MovablePosition extends Position {
         }
 
         if (PieceUtils.isWhiteShortCastle(piece, move)) {
-            _position.remove(Square.H1);
-            _position.put(Square.F1, Piece.WHITE_ROOK);
+            removePiece(Square.H1);
+            setPiece(Piece.WHITE_ROOK, Square.F1);
         } else if (PieceUtils.isWhiteLongCastle(piece, move)) {
-            _position.remove(Square.A1);
-            _position.put(Square.D1, Piece.WHITE_ROOK);
+            removePiece(Square.A1);
+            setPiece(Piece.WHITE_ROOK, Square.D1);
         } else if (PieceUtils.isBlackShortCastle(piece, move)) {
-            _position.remove(Square.H8);
-            _position.put(Square.F8, Piece.BLACK_ROOK);
+            removePiece(Square.H8);
+            setPiece(Piece.BLACK_ROOK, Square.F8);
         } else if (PieceUtils.isBlackLongCastle(piece, move)) {
-            _position.remove(Square.A8);
-            _position.put(Square.D8, Piece.BLACK_ROOK);
+            removePiece(Square.A8);
+            setPiece(Piece.BLACK_ROOK, Square.D8);
         }
     }
 

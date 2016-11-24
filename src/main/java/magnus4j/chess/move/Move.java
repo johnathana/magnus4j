@@ -8,11 +8,11 @@ import magnus4j.chess.Square;
  */
 public class Move {
 
-    protected Square _from;
+    private Square _from;
 
-    protected Square _to;
+    private Square _to;
 
-    protected PieceType _promotion;
+    private PieceType _promotion;
 
     /**
      * Move constructor.
@@ -61,6 +61,6 @@ public class Move {
 
     @Override
     public String toString() {
-        return String.valueOf(_from) + _to;
+        return _from.toLowerCase() + _to.toLowerCase();
     }
 }

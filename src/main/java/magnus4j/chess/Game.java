@@ -79,7 +79,7 @@ public class Game implements Iterable<Move> {
 
         for (int i = _moveIndex; i < ply; i++) {
             Move move = _moves.get(i);
-            _currentPosition.doMove(move);
+            _currentPosition.makeMove(move);
         }
 
         _moveIndex = ply;
@@ -94,7 +94,7 @@ public class Game implements Iterable<Move> {
     public void playMove(final Move move) {
         if (_moveIndex == _moves.size()) {
             _moves.add(move);
-            _currentPosition.doMove(move);
+            _currentPosition.makeMove(move);
             _moveIndex = _moves.size();
         } else {
             _moves.add(_moveIndex, move);

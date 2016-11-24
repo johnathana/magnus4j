@@ -9,9 +9,9 @@ import java.util.Map;
 /**
  * Algebraic piece maps.
  */
-public class AlgebraicPiece {
+class AlgebraicPiece {
 
-    public static final Map<Piece, String> ALGEBRAIC_MAP =
+    static final Map<Piece, String> ALGEBRAIC_MAP =
         Collections.unmodifiableMap(new EnumMap<Piece, String>(Piece.class) {
             {
                 put(Piece.WHITE_KING, "K");
@@ -29,7 +29,7 @@ public class AlgebraicPiece {
             }
         });
 
-    public static final Map<Piece, String> FIGURINE_MAP =
+    static final Map<Piece, String> FIGURINE_MAP =
         Collections.unmodifiableMap(new EnumMap<Piece, String>(Piece.class) {
             {
                 put(Piece.WHITE_KING, "♔");

@@ -36,7 +36,7 @@ public class PGNReader {
 
                 for (String moveStr : moveRow) {
                     Move move = notation.stringToMove(moveStr.trim(), pos);
-                    pos.doMove(move);
+                    pos.makeMove(move);
                     moves.add(move);
                 }
             }

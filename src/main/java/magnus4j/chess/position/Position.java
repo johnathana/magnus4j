@@ -15,7 +15,7 @@ import java.util.Set;
 public class Position {
 
     /**
-     * The magnus4j.chess position as a map.
+     * The chess position as a map.
      */
     Map<Square, Piece> _position;
 

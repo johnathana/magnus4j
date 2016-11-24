@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Algebraic notation.
  */
-public class AlgebraicNotation implements Notation {
+class AlgebraicNotation implements Notation {
 
     private static final String KINGSIDE_CASTLING = "O-O";
 
@@ -31,10 +31,11 @@ public class AlgebraicNotation implements Notation {
      * @param pieceMap
      *            the piece map.
      */
-    public AlgebraicNotation(Map<Piece, String> pieceMap) {
+    AlgebraicNotation(Map<Piece, String> pieceMap) {
         _pieceMap = pieceMap;
     }
 
+    @Override
     public String moveToString(final Move move, final Position pos) {
 
         boolean isCapture = false;
@@ -51,9 +52,7 @@ public class AlgebraicNotation implements Notation {
             isCapture = true;
         }
 
-        /**
-         * Castle handling.
-         */
+        // Castle handling
         if (piece.getPieceType() == PieceType.KING) {
 
             if (PieceUtils.isWhiteShortCastle(piece, move)) {
@@ -73,20 +72,17 @@ public class AlgebraicNotation implements Notation {
             }
         }
 
-        /**
-         * Pawn piece.
-         */
+        // Pawn handling
         if (piece.getPieceType() == PieceType.PAWN) {
-
-            String pawnMove = move.getTo().toString();
+            String pawnMove = move.getTo().toLowerCase();
 
             if (move.getTo() == pos.getEnPassant()) {
                 isCapture = true;
             }
 
-            if (isCapture)
-                pawnMove =
-                    move.getFrom().toString().substring(0, 1) + "x" + move.getTo().toString();
+            if (isCapture) {
+                pawnMove = Character.toLowerCase(move.getFrom().getFile()) + "x" + move.getTo().toLowerCase();
+            }
 
             if (move.isPromotion()) {
                 pawnMove += promotionNotation(move.getPromotionType());
@@ -102,11 +98,12 @@ public class AlgebraicNotation implements Notation {
             sb.append("x");
         }
 
-        sb.append(move.getTo());
+        sb.append(move.getTo().toLowerCase());
 
         return sb.toString();
     }
 
+    @Override
     public String movesToString(final List<Move> moves, final Position pos) {
 
         StringBuilder sb = new StringBuilder();
@@ -122,31 +119,19 @@ public class AlgebraicNotation implements Notation {
                 if (curPos.isWhitesTurn())
                     sb.append(curPos.getFullMoveNumber()).append(".");
                 sb.append(notation);
-
             } catch (Exception ex) {
                 System.err.println(moves);
                 break;
             }
 
-            curPos.doMove(move);
-
-            /**
-             * King in check or mate.
-             */
-            if (PositionUtils.isKingInCheck(curPos)) {
-                if (PositionUtils.isMate(curPos)) {
-                    sb.append("#");
-                } else {
-                    sb.append("+");
-                }
-            }
-
+            curPos.makeMove(move);
+            kingInCheckOrMate(curPos, sb);
             sb.append(" ");
         }
-
         return sb.toString();
     }
 
+    @Override
     public Move stringToMove(String strMove, final Position position) {
 
         if (strMove.equals(KINGSIDE_CASTLING)) {
@@ -188,7 +173,7 @@ public class AlgebraicNotation implements Notation {
 
     private static Square getToSquare(String strMove) {
         String toMove = strMove.substring(strMove.length() - 2, strMove.length());
-        return Square.fromStr(toMove);
+        return Square.fromName(toMove);
     }
 
     private static Square getFromSquare(String strMove, Piece piece, Square to, Position position) {
@@ -210,9 +195,7 @@ public class AlgebraicNotation implements Notation {
         char he = strMove.charAt(piece.getPieceType() == PieceType.PAWN ? 0 : 1);
 
         if (Character.isDigit(he)) {
-            /**
-             * Rank filter.
-             */
+            // Rank filter
             for (Square square : fromSquares) {
                 if (square.getRank() == he) {
                     from = square;
@@ -220,11 +203,9 @@ public class AlgebraicNotation implements Notation {
                 }
             }
         } else {
-            /**
-             * File filter.
-             */
+            // File filter
             for (Square square : fromSquares) {
-                if (square.getFile() == he) {
+                if (square.getFile() == Character.toUpperCase(he)) {
                     from = square;
                     break;
                 }
@@ -246,8 +227,9 @@ public class AlgebraicNotation implements Notation {
     private void appendRankOrFile(Move move, Position pos, StringBuilder sb) {
 
         Piece piece = pos.getPiece(move.getFrom());
-        if (piece.getPieceType() != PieceType.ROOK && piece.getPieceType() != PieceType.KNIGHT
-                && piece.getPieceType() != PieceType.QUEEN) {
+        if (piece.getPieceType() != PieceType.ROOK &&
+            piece.getPieceType() != PieceType.KNIGHT &&
+            piece.getPieceType() != PieceType.QUEEN) {
             return;
         }
 
@@ -279,24 +261,27 @@ public class AlgebraicNotation implements Notation {
         if (samePieceTarget > 0) {
 
             if (samePieceSameRank > 0)
-                sb.append(move.getFrom().getFile());
+                sb.append(Character.toLowerCase(move.getFrom().getFile()));
 
             if (samePieceSameFile > 0)
                 sb.append(move.getFrom().getRank());
 
             if (samePieceSameRank == 0 && samePieceSameFile == 0) {
-                sb.append(move.getFrom().getFile());
+                sb.append(Character.toLowerCase(move.getFrom().getFile()));
             }
         }
     }
 
-    /**
-     * Promotion to algebraic notation.
-     *
-     * @param pieceType
-     *            the piece type.
-     * @return the algebraic promotion.
-     */
+    private void kingInCheckOrMate(Position position, StringBuilder sb) {
+        if (PositionUtils.isKingInCheck(position)) {
+            if (PositionUtils.isMate(position)) {
+                sb.append("#");
+            } else {
+                sb.append("+");
+            }
+        }
+    }
+
     private static String promotionNotation(final PieceType pieceType) {
         switch (pieceType) {
         case QUEEN:
@@ -312,13 +297,6 @@ public class AlgebraicNotation implements Notation {
         }
     }
 
-    /**
-     * Algebraic notation piece.
-     *
-     * @param pieceChar
-     *            the piece char.
-     * @return the piece type.
-     */
     private static PieceType pieceFromChar(char pieceChar) {
         switch (pieceChar) {
         case 'N':
@@ -335,5 +313,4 @@ public class AlgebraicNotation implements Notation {
             throw new IllegalArgumentException();
         }
     }
-
 }

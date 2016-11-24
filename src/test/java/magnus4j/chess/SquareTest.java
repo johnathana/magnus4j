@@ -11,17 +11,12 @@ public class SquareTest {
 
     @Test
     public void testToString() throws Exception {
-        assertEquals("a1", Square.A1.toString());
-    }
-
-    @Test
-    public void testGetFenSquare() throws Exception {
-        assertEquals(63, Square.H1.getFenSquare());
+        assertEquals("a1", Square.A1.toLowerCase());
     }
 
     @Test
     public void testGetFile() throws Exception {
-        assertEquals('e', Square.E1.getFile());
+        assertEquals('E', Square.E1.getFile());
     }
 
     @Test
@@ -30,12 +25,7 @@ public class SquareTest {
     }
 
     @Test
-    public void testValueOf() throws Exception {
-        assertEquals(Square.valueOf(63), Square.H1);
-    }
-
-    @Test
-    public void testFromStr() throws Exception {
-        assertEquals(Square.A1, Square.fromStr("A1"));
+    public void testFromName() throws Exception {
+        assertEquals(Square.A1, Square.fromName("a1"));
     }
 }
