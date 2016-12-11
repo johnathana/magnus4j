@@ -47,9 +47,7 @@ public abstract class AbstractUCIEngine implements UCIProtocol {
 
         startEngine();
 
-        /**
-         * The command to initialize the uci interface.
-         */
+        // initialize the uci interface.
         writeLine("uci");
     }
 
@@ -59,20 +57,14 @@ public abstract class AbstractUCIEngine implements UCIProtocol {
         if (!isRunning())
             return;
 
-        /**
-         * UCI quit command.
-         */
+        // UCI quit command.
         writeLine("quit");
 
-        /**
-         * Wait for the engine to quit.
-         */
-        sleepWait(1000);
-
-        /**
-         * Kills the process.
-         */
-        _engineProcess.destroy();
+        try {
+            _engineProcess.waitFor();
+        } catch (InterruptedException e) {
+            throw new UCIEngineException(e);
+        }
     }
 
     @Override
@@ -199,21 +191,6 @@ public abstract class AbstractUCIEngine implements UCIProtocol {
     private void validateEngineRunning() {
         if (!isRunning()) {
             throw new UCIEngineException("Engine dead.");
-        }
-    }
-
-    /**
-     * Wait function.
-     *
-     * @param millis
-     *            the milliseconds to sleep.
-     */
-    private void sleepWait(final long millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException ie) {
-            System.err.format("Awakened prematurely: %s", ie.toString());
-            Thread.currentThread().interrupt();
         }
     }
 }
