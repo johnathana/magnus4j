@@ -5,27 +5,27 @@ apply plugin: 'application'
 
 mainClassName = 'magnus4j.Main'
 
+version = "1.0"
+description = "Chess libray for Java"
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
 jar {
     manifest {
         attributes ('Main-Class': mainClassName )
     }
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-repositories {
-    mavenLocal()
-    mavenCentral()
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 dependencies {
     testCompile 'junit:junit:4.11'
-}
-
-
-test {
-    testLogging {
-        events 'passed'
-    }
 }
